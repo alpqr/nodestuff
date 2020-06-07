@@ -14,6 +14,7 @@ find_package(Qt6 COMPONENTS Quick)
 
 add_qt_gui_executable(nodestuff
     main.cpp gui.cpp gui.h
+    graph.cpp graph.h nodetypes.h portdata.h nodeconstructors.cpp nodeconstructors.h grapheval.cpp grapheval.h
     qrhiimgui.cpp qrhiimgui.h qrhiimgui_p.h
     imgui/imgui.cpp imgui/imgui_demo.cpp imgui/imgui_draw.cpp imgui/imgui_widgets.cpp
     imnodes/imnodes.cpp

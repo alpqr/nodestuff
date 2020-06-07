@@ -2,6 +2,7 @@
 #include <QQuickView>
 #include "qrhiimgui.h"
 #include "gui.h"
+#include "grapheval.h"
 
 struct ImGuiQuick
 {
@@ -92,6 +93,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     QGuiApplication app(argc, argv);
 
+    Graph graph;
     Gui gui;
     ImGuiQuick ig;
     QQuickView view;
@@ -103,7 +105,11 @@ int main(int argc, char *argv[])
 
     ImGui::GetIO().IniFilename = nullptr;
     ig.setWindow(&view);
-    ig.d.setFrameFunc([&gui] { gui.frame(); });
+    ig.d.setFrameFunc([&gui, &graph] {
+        gui.frame();
+        GraphEval::update(graph);
+    });
+    gui.init(&graph);
 
     view.setColor(Qt::black);
     view.setResizeMode(QQuickView::SizeRootObjectToView);
@@ -112,6 +118,6 @@ int main(int argc, char *argv[])
     view.show();
 
     int r = app.exec();
-
+    gui.cleanup();
     return r;
 }
