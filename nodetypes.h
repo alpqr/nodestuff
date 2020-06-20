@@ -4,11 +4,17 @@
 enum class NodeType
 {
     Invalid = 0,
+
     Float,
-    Int,
-    UInt,
+    Vec2,
+    Vec3,
+    Vec4,
+
     Plus,
-    Minus
+    Minus,
+    Mul,
+    Div,
+    Negate
 };
 
 #endif

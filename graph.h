@@ -13,10 +13,10 @@ using Id = int; // uses one global id space for everything
 struct Connection
 {
     Id id;
-    Id node0;
-    Id node1;
-    Id port0;
-    Id port1;
+    struct {
+        Id nodeId;
+        Id portId;
+    } ep[2];
 };
 
 enum class PortDirection {
@@ -74,8 +74,9 @@ struct Graph
     void removeNode(Id id)
     {
         nodes.erase(id);
+        // ### portNodeMap
         connections.erase(std::remove_if(connections.begin(), connections.end(),
-            [id](const Connection &c) { return c.node0 == id || c.node1 == id; }), connections.end());
+            [id](const Connection &c) { return c.ep[0].nodeId == id || c.ep[1].nodeId == id; }), connections.end());
     }
 
     Node &node(Id id) { return nodes.at(id); }
@@ -94,7 +95,7 @@ struct Graph
         node.ports.erase(std::find_if(node.ports.begin(), node.ports.end(), [id](const Port &port) { return port.id == id; }));
         portNodeMap.erase(id);
         connections.erase(std::remove_if(connections.begin(), connections.end(),
-            [id](const Connection &c) { return c.port0 == id || c.port1 == id; }), connections.end());
+            [id](const Connection &c) { return c.ep[0].portId == id || c.ep[1].portId == id; }), connections.end());
     }
 
     Node &nodeForPort(Id id) { return nodes.at(portNodeMap[id]); }
@@ -106,17 +107,17 @@ struct Graph
         if (node(fromNode).port(fromPort).dir != node(toNode).port(toPort).dir) {
             // disallow multiple connections to an Input
             if (std::find_if(connections.cbegin(), connections.cend(), [this, fromPort, toPort](const Connection &c) {
-                if (c.port0 == fromPort || c.port0 == toPort) {
-                    if (node(c.node0).port(c.port0).dir == PortDirection::Input)
-                        return true;
-                } else if (c.port1 == fromPort || c.port1 == toPort) {
-                    if (node(c.node1).port(c.port1).dir == PortDirection::Input)
-                        return true;
+                for (int i = 0; i < 2; ++i) {
+                    const Id cpid = c.ep[i].portId;
+                    if (cpid == fromPort || cpid == toPort) {
+                        if (node(c.ep[i].nodeId).port(cpid).dir == PortDirection::Input)
+                            return true;
+                    }
                 }
                 return false;
             }) == connections.cend()) {
                 const Id id = nextId++;
-                connections.push_back({ id, fromNode, toNode, fromPort, toPort });
+                connections.push_back({ id, { { fromNode, fromPort }, { toNode, toPort } } });
                 return id;
             }
         }
@@ -135,14 +136,12 @@ struct Graph
         std::vector<std::pair<Id, int>> result;
         const Node &n(node(id));
         for (const Connection &c : connections) {
-            if (n.id == c.node0) {
-                const Port &port(n.port(c.port0));
-                if (port.dir == PortDirection::Input)
-                    result.push_back({ c.node1, port.order });
-            } else if (n.id == c.node1) {
-                const Port &port(n.port(c.port1));
-                if (port.dir == PortDirection::Input)
-                    result.push_back({ c.node0, port.order });
+            for (int i = 0; i < 2; ++i) {
+                if (n.id == c.ep[i].nodeId) {
+                    const Port &port(n.port(c.ep[i].portId));
+                    if (port.dir == PortDirection::Input)
+                        result.push_back({ c.ep[1 - i].nodeId, port.order });
+                }
             }
         }
         std::sort(result.begin(), result.end(), [](const std::pair<Id, int> &a, const std::pair<Id, int> &b) {

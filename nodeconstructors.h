@@ -6,11 +6,15 @@
 namespace NodeConstructors {
 
 Id constructFloatNode(Graph *g);
-Id constructIntNode(Graph *g);
-Id constructUIntNode(Graph *g);
+Id constructVec2Node(Graph *g);
+Id constructVec3Node(Graph *g);
+Id constructVec4Node(Graph *g);
 
 Id constructPlusNode(Graph *g);
 Id constructMinusNode(Graph *g);
+Id constructMulNode(Graph *g);
+Id constructDivNode(Graph *g);
+Id constructNegateNode(Graph *g);
 
 } // namespace
 
@@ -28,14 +32,18 @@ struct NodeConstructorSet
 
 static NodeConstructor nodeConstructors_const[] = {
     { "Float", NodeConstructors::constructFloatNode },
-    { "Int", NodeConstructors::constructIntNode },
-    { "UInt", NodeConstructors::constructUIntNode },
+    { "Vec2", NodeConstructors::constructVec2Node },
+    { "Vec3", NodeConstructors::constructVec3Node },
+    { "Vec4", NodeConstructors::constructVec4Node },
     { nullptr, nullptr }
 };
 
 static NodeConstructor nodeConstructors_arith[] = {
     { "Plus", NodeConstructors::constructPlusNode },
     { "Minus", NodeConstructors::constructMinusNode },
+    { "Mul", NodeConstructors::constructMulNode },
+    { "Div", NodeConstructors::constructDivNode },
+    { "Negate", NodeConstructors::constructNegateNode },
     { nullptr, nullptr }
 };
 

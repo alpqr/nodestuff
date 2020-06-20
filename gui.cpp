@@ -22,14 +22,19 @@ static void valueEditor(Port &port, bool *active)
             ImGui::InputFloat("", &arg.v);
             *active |= ImGui::IsItemActive();
             ImGui::PopItemWidth();
-        } else if constexpr (std::is_same_v<T, PortDataInt>) {
-            ImGui::PushItemWidth(60);
-            ImGui::InputScalar("", ImGuiDataType_S32, &arg.v);
+        } else if constexpr (std::is_same_v<T, PortDataVec2>) {
+            ImGui::PushItemWidth(120);
+            ImGui::InputFloat2("", arg.v.data());
             *active |= ImGui::IsItemActive();
             ImGui::PopItemWidth();
-        } else if constexpr (std::is_same_v<T, PortDataUInt>) {
-            ImGui::PushItemWidth(60);
-            ImGui::InputScalar("", ImGuiDataType_U32, &arg.v);
+        } else if constexpr (std::is_same_v<T, PortDataVec3>) {
+            ImGui::PushItemWidth(180);
+            ImGui::InputFloat3("", arg.v.data());
+            *active |= ImGui::IsItemActive();
+            ImGui::PopItemWidth();
+        } else if constexpr (std::is_same_v<T, PortDataVec4>) {
+            ImGui::PushItemWidth(240);
+            ImGui::InputFloat4("", arg.v.data());
             *active |= ImGui::IsItemActive();
             ImGui::PopItemWidth();
         }
@@ -42,20 +47,19 @@ static void valueLabel(const Port &port)
         using T = std::decay_t<decltype(arg)>;
         char s[128];
         if constexpr (std::is_same_v<T, PortDataFloat>) {
-            ImGui::PushItemWidth(60);
             sprintf(s, "%.5f", arg.v);
             ImGui::Text(s);
-            ImGui::PopItemWidth();
-        } else if constexpr (std::is_same_v<T, PortDataInt>) {
-            ImGui::PushItemWidth(60);
-            sprintf(s, "%d", arg.v);
+        } else if constexpr (std::is_same_v<T, PortDataVec2>) {
+            sprintf(s, "(%.5f, %.5f)", arg.v[0], arg.v[1]);
             ImGui::Text(s);
-            ImGui::PopItemWidth();
-        } else if constexpr (std::is_same_v<T, PortDataUInt>) {
-            ImGui::PushItemWidth(60);
-            sprintf(s, "%u", arg.v);
+        } else if constexpr (std::is_same_v<T, PortDataVec3>) {
+            sprintf(s, "(%.5f, %.5f, %.5f)", arg.v[0], arg.v[1], arg.v[2]);
             ImGui::Text(s);
-            ImGui::PopItemWidth();
+        } else if constexpr (std::is_same_v<T, PortDataVec4>) {
+            sprintf(s, "(%.5f, %.5f, %.5f, %.5f)", arg.v[0], arg.v[1], arg.v[2], arg.v[3]);
+            ImGui::Text(s);
+        } else {
+            ImGui::TextColored(ImVec4(1, 0, 0, 1), "UNKNOWN");
         }
     }, port.data.d);
 }
@@ -105,7 +109,7 @@ void Gui::frame()
     }
 
     for (const Connection &c : graph->connections)
-        imnodes::Link(c.id, c.port0, c.port1);
+        imnodes::Link(c.id, c.ep[0].portId, c.ep[1].portId);
 
     const bool editorHovered = imnodes::IsEditorHovered();
     imnodes::EndNodeEditor();
