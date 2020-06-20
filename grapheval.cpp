@@ -99,22 +99,18 @@ inline bool evalArith2Node(Graph &g, Node &n, std::vector<PortData>& evalStack, 
     return false;
 }
 
-using V2 = std::array<float, 2>;
-using V3 = std::array<float, 3>;
-using V4 = std::array<float, 4>;
-
 void evalPlusNode(Graph &g, Node &n, std::vector<PortData>& evalStack)
 {
     if (evalArith2Node<float, PortDataFloat, float, PortDataFloat>(g, n, evalStack, [](float a, float b) { return PortDataFloat { a + b }; }))
         return;
 
-    if (evalArith2Node<V2, PortDataVec2, V2, PortDataVec2>(g, n, evalStack, [](const V2 &a, const V2 &b) { return PortDataVec2 { { a[0] + b[0], a[1] + b[1] } }; }))
+    if (evalArith2Node<glm::vec2, PortDataVec2, glm::vec2, PortDataVec2>(g, n, evalStack, [](const glm::vec2 &a, const glm::vec2 &b) { return PortDataVec2 { a + b }; }))
         return;
 
-    if (evalArith2Node<V3, PortDataVec3, V3, PortDataVec3>(g, n, evalStack, [](const V3 &a, const V3 &b) { return PortDataVec3 { { a[0] + b[0], a[1] + b[1], a[2] + b[2] } }; }))
+    if (evalArith2Node<glm::vec3, PortDataVec3, glm::vec3, PortDataVec3>(g, n, evalStack, [](const glm::vec3 &a, const glm::vec3 &b) { return PortDataVec3 { a + b }; }))
         return;
 
-    if (evalArith2Node<V4, PortDataVec4, V4, PortDataVec4>(g, n, evalStack, [](const V4 &a, const V4 &b) { return PortDataVec4 { { a[0] + b[0], a[1] + b[1], a[2] + b[2], a[3] + b[3] } }; }))
+    if (evalArith2Node<glm::vec4, PortDataVec4, glm::vec4, PortDataVec4>(g, n, evalStack, [](const glm::vec4 &a, const glm::vec4 &b) { return PortDataVec4 { a + b }; }))
         return;
 
     pushArith2Result(evalStack, n, PortData { });
@@ -125,13 +121,13 @@ void evalMinusNode(Graph &g, Node &n, std::vector<PortData>& evalStack)
     if (evalArith2Node<float, PortDataFloat, float, PortDataFloat>(g, n, evalStack, [](float a, float b) { return PortDataFloat { a - b }; }))
         return;
 
-    if (evalArith2Node<V2, PortDataVec2, V2, PortDataVec2>(g, n, evalStack, [](const V2 &a, const V2 &b) { return PortDataVec2 { { a[0] - b[0], a[1] - b[1] } }; }))
+    if (evalArith2Node<glm::vec2, PortDataVec2, glm::vec2, PortDataVec2>(g, n, evalStack, [](const glm::vec2 &a, const glm::vec2 &b) { return PortDataVec2 { a - b }; }))
         return;
 
-    if (evalArith2Node<V3, PortDataVec3, V3, PortDataVec3>(g, n, evalStack, [](const V3 &a, const V3 &b) { return PortDataVec3 { { a[0] - b[0], a[1] - b[1], a[2] - b[2] } }; }))
+    if (evalArith2Node<glm::vec3, PortDataVec3, glm::vec3, PortDataVec3>(g, n, evalStack, [](const glm::vec3 &a, const glm::vec3 &b) { return PortDataVec3 { a - b }; }))
         return;
 
-    if (evalArith2Node<V4, PortDataVec4, V4, PortDataVec4>(g, n, evalStack, [](const V4 &a, const V4 &b) { return PortDataVec4 { { a[0] - b[0], a[1] - b[1], a[2] - b[2], a[3] - b[3] } }; }))
+    if (evalArith2Node<glm::vec4, PortDataVec4, glm::vec4, PortDataVec4>(g, n, evalStack, [](const glm::vec4 &a, const glm::vec4 &b) { return PortDataVec4 { a - b }; }))
         return;
 
     pushArith2Result(evalStack, n, PortData { });
@@ -142,31 +138,61 @@ void evalMulNode(Graph &g, Node &n, std::vector<PortData>& evalStack)
     if (evalArith2Node<float, PortDataFloat, float, PortDataFloat>(g, n, evalStack, [](float a, float b) { return PortDataFloat { a * b }; }))
         return;
 
-    if (evalArith2Node<V2, PortDataVec2, V2, PortDataVec2>(g, n, evalStack, [](const V2 &a, const V2 &b) { return PortDataVec2 { { a[0] * b[0], a[1] * b[1] } }; }))
+    if (evalArith2Node<glm::vec2, PortDataVec2, glm::vec2, PortDataVec2>(g, n, evalStack, [](const glm::vec2 &a, const glm::vec2 &b) { return PortDataVec2 { a * b }; }))
         return;
 
-    if (evalArith2Node<V2, PortDataVec2, float, PortDataFloat>(g, n, evalStack, [](const V2 &a, float b) { return PortDataVec2 { { a[0] * b, a[1] * b } }; }))
+    if (evalArith2Node<glm::vec2, PortDataVec2, float, PortDataFloat>(g, n, evalStack, [](const glm::vec2 &a, float b) { return PortDataVec2 { a * b }; }))
         return;
 
-    if (evalArith2Node<float, PortDataFloat, V2, PortDataVec2>(g, n, evalStack, [](float a, const V2 &b) { return PortDataVec2 { { a * b[0], a * b[1] } }; }))
+    if (evalArith2Node<float, PortDataFloat, glm::vec2, PortDataVec2>(g, n, evalStack, [](float a, const glm::vec2 &b) { return PortDataVec2 { a * b }; }))
         return;
 
-    if (evalArith2Node<V3, PortDataVec3, V3, PortDataVec3>(g, n, evalStack, [](const V3 &a, const V3 &b) { return PortDataVec3 { { a[0] * b[0], a[1] * b[1], a[2] * b[2] } }; }))
+    if (evalArith2Node<glm::vec3, PortDataVec3, glm::vec3, PortDataVec3>(g, n, evalStack, [](const glm::vec3 &a, const glm::vec3 &b) { return PortDataVec3 { a * b }; }))
         return;
 
-    if (evalArith2Node<V3, PortDataVec3, float, PortDataFloat>(g, n, evalStack, [](const V3 &a, float b) { return PortDataVec3 { { a[0] * b, a[1] * b, a[2] * b } }; }))
+    if (evalArith2Node<glm::vec3, PortDataVec3, float, PortDataFloat>(g, n, evalStack, [](const glm::vec3 &a, float b) { return PortDataVec3 { a * b }; }))
         return;
 
-    if (evalArith2Node<float, PortDataFloat, V3, PortDataVec3>(g, n, evalStack, [](float a, const V3 &b) { return PortDataVec3 { { a * b[0], a * b[1], a * b[2] } }; }))
+    if (evalArith2Node<float, PortDataFloat, glm::vec3, PortDataVec3>(g, n, evalStack, [](float a, const glm::vec3 &b) { return PortDataVec3 { a * b }; }))
         return;
 
-    if (evalArith2Node<V4, PortDataVec4, V4, PortDataVec4>(g, n, evalStack, [](const V4 &a, const V4 &b) { return PortDataVec4 { { a[0] * b[0], a[1] * b[1], a[2] * b[2], a[3] * b[3] } }; }))
+    if (evalArith2Node<glm::vec4, PortDataVec4, glm::vec4, PortDataVec4>(g, n, evalStack, [](const glm::vec4 &a, const glm::vec4 &b) { return PortDataVec4 { a * b }; }))
         return;
 
-    if (evalArith2Node<V4, PortDataVec4, float, PortDataFloat>(g, n, evalStack, [](const V4 &a, float b) { return PortDataVec4 { { a[0] * b, a[1] * b, a[2] * b, a[3] * b } }; }))
+    if (evalArith2Node<glm::vec4, PortDataVec4, float, PortDataFloat>(g, n, evalStack, [](const glm::vec4 &a, float b) { return PortDataVec4 { a * b }; }))
         return;
 
-    if (evalArith2Node<float, PortDataFloat, V4, PortDataVec4>(g, n, evalStack, [](float a, const V4 &b) { return PortDataVec4 { { a * b[0], a * b[1], a * b[2], a * b[3] } }; }))
+    if (evalArith2Node<float, PortDataFloat, glm::vec4, PortDataVec4>(g, n, evalStack, [](float a, const glm::vec4 &b) { return PortDataVec4 { a * b }; }))
+        return;
+
+    if (evalArith2Node<glm::mat3, PortDataMat3, glm::mat3, PortDataMat3>(g, n, evalStack, [](const glm::mat3 &a, const glm::mat3 &b) { return PortDataMat3 { a * b }; }))
+        return;
+
+    if (evalArith2Node<glm::mat3, PortDataMat3, float, PortDataFloat>(g, n, evalStack, [](const glm::mat3 &a, float b) { return PortDataMat3 { a * b }; }))
+        return;
+
+    if (evalArith2Node<float, PortDataFloat, glm::mat3, PortDataMat3>(g, n, evalStack, [](float a, const glm::mat3 &b) { return PortDataMat3 { a * b }; }))
+        return;
+
+    if (evalArith2Node<glm::mat3, PortDataMat3, glm::vec3, PortDataVec3>(g, n, evalStack, [](const glm::mat3 &a, const glm::vec3 &b) { return PortDataVec3 { a * b }; }))
+        return;
+
+    if (evalArith2Node<glm::vec3, PortDataVec3, glm::mat3, PortDataMat3>(g, n, evalStack, [](const glm::vec3 &a, const glm::mat3 &b) { return PortDataVec3 { a * b }; }))
+        return;
+
+    if (evalArith2Node<glm::mat4, PortDataMat4, glm::mat4, PortDataMat4>(g, n, evalStack, [](const glm::mat4 &a, const glm::mat4 &b) { return PortDataMat4 { a * b }; }))
+        return;
+
+    if (evalArith2Node<glm::mat4, PortDataMat4, float, PortDataFloat>(g, n, evalStack, [](const glm::mat4 &a, float b) { return PortDataMat4 { a * b }; }))
+        return;
+
+    if (evalArith2Node<float, PortDataFloat, glm::mat4, PortDataMat4>(g, n, evalStack, [](float a, const glm::mat4 &b) { return PortDataMat4 { a * b }; }))
+        return;
+
+    if (evalArith2Node<glm::mat4, PortDataMat4, glm::vec4, PortDataVec4>(g, n, evalStack, [](const glm::mat4 &a, const glm::vec4 &b) { return PortDataVec4 { a * b }; }))
+        return;
+
+    if (evalArith2Node<glm::vec4, PortDataVec4, glm::mat4, PortDataMat4>(g, n, evalStack, [](const glm::vec4 &a, const glm::mat4 &b) { return PortDataVec4 { a * b }; }))
         return;
 
     pushArith2Result(evalStack, n, PortData { });
@@ -177,13 +203,13 @@ void evalDivNode(Graph &g, Node &n, std::vector<PortData>& evalStack)
     if (evalArith2Node<float, PortDataFloat, float, PortDataFloat>(g, n, evalStack, [](float a, float b) { return PortDataFloat { a / b }; }))
         return;
 
-    if (evalArith2Node<V2, PortDataVec2, V2, PortDataVec2>(g, n, evalStack, [](const V2 &a, const V2 &b) { return PortDataVec2 { { a[0] / b[0], a[1] / b[1] } }; }))
+    if (evalArith2Node<glm::vec2, PortDataVec2, glm::vec2, PortDataVec2>(g, n, evalStack, [](const glm::vec2 &a, const glm::vec2 &b) { return PortDataVec2 { a / b }; }))
         return;
 
-    if (evalArith2Node<V3, PortDataVec3, V3, PortDataVec3>(g, n, evalStack, [](const V3 &a, const V3 &b) { return PortDataVec3 { { a[0] / b[0], a[1] / b[1], a[2] / b[2] } }; }))
+    if (evalArith2Node<glm::vec3, PortDataVec3, glm::vec3, PortDataVec3>(g, n, evalStack, [](const glm::vec3 &a, const glm::vec3 &b) { return PortDataVec3 { a / b }; }))
         return;
 
-    if (evalArith2Node<V4, PortDataVec4, V4, PortDataVec4>(g, n, evalStack, [](const V4 &a, const V4 &b) { return PortDataVec4 { { a[0] / b[0], a[1] / b[1], a[2] / b[2], a[3] / b[3] } }; }))
+    if (evalArith2Node<glm::vec4, PortDataVec4, glm::vec4, PortDataVec4>(g, n, evalStack, [](const glm::vec4 &a, const glm::vec4 &b) { return PortDataVec4 { a / b }; }))
         return;
 
     pushArith2Result(evalStack, n, PortData { });
@@ -217,13 +243,13 @@ void evalNegateNode(Graph &g, Node &n, std::vector<PortData>& evalStack)
     if (evalArith1Node<float, PortDataFloat>(g, n, evalStack, [](float a) { return PortDataFloat { -a }; }))
         return;
 
-    if (evalArith1Node<V2, PortDataVec2>(g, n, evalStack, [](const V2 &a) { return PortDataVec2 { { -a[0], -a[1] } }; }))
+    if (evalArith1Node<glm::vec2, PortDataVec2>(g, n, evalStack, [](const glm::vec2 &a) { return PortDataVec2 { -a }; }))
         return;
 
-    if (evalArith1Node<V3, PortDataVec3>(g, n, evalStack, [](const V3 &a) { return PortDataVec3 { { -a[0], -a[1], -a[2] } }; }))
+    if (evalArith1Node<glm::vec3, PortDataVec3>(g, n, evalStack, [](const glm::vec3 &a) { return PortDataVec3 { -a }; }))
         return;
 
-    if (evalArith1Node<V4, PortDataVec4>(g, n, evalStack, [](const V4 &a) { return PortDataVec4 { { -a[0], -a[1], -a[2], -a[3] } }; }))
+    if (evalArith1Node<glm::vec4, PortDataVec4>(g, n, evalStack, [](const glm::vec4 &a) { return PortDataVec4 { -a }; }))
         return;
 
     pushArith1Result(evalStack, n, PortData { });

@@ -22,6 +22,7 @@ add_qt_gui_executable(nodestuff
 target_include_directories(nodestuff PUBLIC
     imgui
     imnodes
+    glm
 )
 target_compile_definitions(nodestuff PUBLIC
     _CRT_SECURE_NO_WARNINGS

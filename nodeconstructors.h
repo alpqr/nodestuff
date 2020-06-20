@@ -9,6 +9,8 @@ Id constructFloatNode(Graph *g);
 Id constructVec2Node(Graph *g);
 Id constructVec3Node(Graph *g);
 Id constructVec4Node(Graph *g);
+Id constructMat3Node(Graph *g);
+Id constructMat4Node(Graph *g);
 
 Id constructPlusNode(Graph *g);
 Id constructMinusNode(Graph *g);
@@ -35,6 +37,8 @@ static NodeConstructor nodeConstructors_const[] = {
     { "Vec2", NodeConstructors::constructVec2Node },
     { "Vec3", NodeConstructors::constructVec3Node },
     { "Vec4", NodeConstructors::constructVec4Node },
+    { "Mat3", NodeConstructors::constructMat3Node },
+    { "Mat4", NodeConstructors::constructMat4Node },
     { nullptr, nullptr }
 };
 

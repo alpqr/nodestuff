@@ -39,7 +39,7 @@ Id constructVec2Node(Graph *g)
     char s[128];
     sprintf(s, "Vec2 [%d]", n.id);
     n.text = s;
-    addConstantPorts(g, n, PortDataVec2 { { 0.0f, 0.0f } });
+    addConstantPorts(g, n, PortDataVec2 { glm::vec2() });
     return n.id;
 }
 
@@ -51,7 +51,7 @@ Id constructVec3Node(Graph *g)
     char s[128];
     sprintf(s, "Vec3 [%d]", n.id);
     n.text = s;
-    addConstantPorts(g, n, PortDataVec3 { { 0.0f, 0.0f, 0.0f } });
+    addConstantPorts(g, n, PortDataVec3 { glm::vec3() });
     return n.id;
 }
 
@@ -63,7 +63,31 @@ Id constructVec4Node(Graph *g)
     char s[128];
     sprintf(s, "Vec4 [%d]", n.id);
     n.text = s;
-    addConstantPorts(g, n, PortDataVec4 { { 0.0f, 0.0f, 0.0f, 0.0f } });
+    addConstantPorts(g, n, PortDataVec4 { glm::vec4() });
+    return n.id;
+}
+
+Id constructMat3Node(Graph *g)
+{
+    Node &n(g->newNode());
+    n.type = NodeType::Mat3;
+    n.evalFunc = GraphEval::evalConstantNode;
+    char s[128];
+    sprintf(s, "Mat3 [%d]", n.id);
+    n.text = s;
+    addConstantPorts(g, n, PortDataMat3 { glm::mat3(1, 0, 0, 0, 1, 0, 0, 0, 1) });
+    return n.id;
+}
+
+Id constructMat4Node(Graph *g)
+{
+    Node &n(g->newNode());
+    n.type = NodeType::Mat4;
+    n.evalFunc = GraphEval::evalConstantNode;
+    char s[128];
+    sprintf(s, "Mat4 [%d]", n.id);
+    n.text = s;
+    addConstantPorts(g, n, PortDataMat4 { glm::mat4(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1) });
     return n.id;
 }
 
