@@ -10,8 +10,8 @@ struct PortDataFloat { float v; };
 struct PortDataVec2 { glm::vec2 v; };
 struct PortDataVec3 { glm::vec3 v; };
 struct PortDataVec4 { glm::vec4 v; };
-struct PortDataMat3 { glm::mat3 v; };
-struct PortDataMat4 { glm::mat4 v; };
+struct PortDataMat3 { glm::mat3 v; bool editAsRowMajor; };
+struct PortDataMat4 { glm::mat4 v; bool editAsRowMajor; };
 struct PortDataString { std::string v; };
 
 using PortDataVar = std::variant<

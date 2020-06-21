@@ -38,19 +38,37 @@ static void valueEditor(Port &port, bool *active)
             *active |= ImGui::IsItemActive();
             ImGui::PopItemWidth();
         } else if constexpr (std::is_same_v<T, PortDataMat3>) {
-            ImGui::Text("");
+            ImGui::Checkbox("Edit as row major", &arg.editAsRowMajor);
             ImGui::PushItemWidth(180);
-            static const char *labels[3] = { "COL 0", "COL 1", "COL 2" };
-            for (int col = 0; col < 3; ++col)
-                ImGui::InputFloat3(labels[col], glm::value_ptr(arg.v) + 3 * col);
+            if (arg.editAsRowMajor) {
+                static const char *labels[3] = { "ROW 0", "ROW 1", "ROW 2" };
+                for (int row = 0; row < 3; ++row) {
+                    float v[3] = { arg.v[0][row], arg.v[1][row], arg.v[2][row] };
+                    ImGui::InputFloat3(labels[row], v);
+                    arg.v[0][row] = v[0]; arg.v[1][row] = v[1]; arg.v[2][row] = v[2];
+                }
+            } else {
+                static const char *labels[3] = { "COL 0", "COL 1", "COL 2" };
+                for (int col = 0; col < 3; ++col)
+                    ImGui::InputFloat3(labels[col], glm::value_ptr(arg.v) + 3 * col);
+            }
             *active |= ImGui::IsItemActive();
             ImGui::PopItemWidth();
         } else if constexpr (std::is_same_v<T, PortDataMat4>) {
-            ImGui::Text("");
+            ImGui::Checkbox("Edit as row major", &arg.editAsRowMajor);
             ImGui::PushItemWidth(240);
-            static const char *labels[4] = { "COL 0", "COL 1", "COL 2", "COL 3" };
-            for (int col = 0; col < 4; ++col)
-                ImGui::InputFloat4(labels[col], glm::value_ptr(arg.v) + 4 * col);
+            if (arg.editAsRowMajor) {
+                static const char *labels[4] = { "ROW 0", "ROW 1", "ROW 2", "ROW 3" };
+                for (int row = 0; row < 4; ++row) {
+                    float v[4] = { arg.v[0][row], arg.v[1][row], arg.v[2][row], arg.v[3][row] };
+                    ImGui::InputFloat4(labels[row], v);
+                    arg.v[0][row] = v[0]; arg.v[1][row] = v[1]; arg.v[2][row] = v[2]; arg.v[3][row] = v[3];
+                }
+            } else {
+                static const char *labels[4] = { "COL 0", "COL 1", "COL 2", "COL 3" };
+                for (int col = 0; col < 4; ++col)
+                    ImGui::InputFloat4(labels[col], glm::value_ptr(arg.v) + 4 * col);
+            }
             *active |= ImGui::IsItemActive();
             ImGui::PopItemWidth();
         } else if constexpr (std::is_same_v<T, PortDataString>) {
