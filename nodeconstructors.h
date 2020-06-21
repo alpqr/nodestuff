@@ -76,10 +76,10 @@ static NodeConstructor nodeConstructors_comp[] = {
 };
 
 static NodeConstructor nodeConstructors_arith[] = {
-    { "Plus", NodeConstructors::constructPlusNode },
-    { "Minus", NodeConstructors::constructMinusNode },
-    { "Mul", NodeConstructors::constructMulNode },
-    { "Div", NodeConstructors::constructDivNode },
+    { "Add", NodeConstructors::constructPlusNode },
+    { "Subtract", NodeConstructors::constructMinusNode },
+    { "Multiply", NodeConstructors::constructMulNode },
+    { "Divide", NodeConstructors::constructDivNode },
     { "Negate", NodeConstructors::constructNegateNode },
     { nullptr, nullptr }
 };

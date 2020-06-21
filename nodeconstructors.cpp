@@ -78,12 +78,12 @@ static inline void addOp2Ports(Graph *g, Node &n)
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 0;
-        port.text = "LHS";
+        port.text = "Left operand";
     }
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 1;
-        port.text = "RHS";
+        port.text = "Right operand";
     }
     {
         Port &port = g->addPort(n, PortDirection::Output);
@@ -94,28 +94,28 @@ static inline void addOp2Ports(Graph *g, Node &n)
 
 Id constructPlusNode(Graph *g)
 {
-    Node &n(newNode(g, "Plus", NodeType::Plus, GraphEval::evalPlusNode));
+    Node &n(newNode(g, "Add", NodeType::Plus, GraphEval::evalPlusNode));
     addOp2Ports(g, n);
     return n.id;
 }
 
 Id constructMinusNode(Graph *g)
 {
-    Node &n(newNode(g, "Minus", NodeType::Minus, GraphEval::evalMinusNode));
+    Node &n(newNode(g, "Subtract", NodeType::Minus, GraphEval::evalMinusNode));
     addOp2Ports(g, n);
     return n.id;
 }
 
 Id constructMulNode(Graph *g)
 {
-    Node &n(newNode(g, "Mul", NodeType::Mul, GraphEval::evalMulNode));
+    Node &n(newNode(g, "Multiply", NodeType::Mul, GraphEval::evalMulNode));
     addOp2Ports(g, n);
     return n.id;
 }
 
 Id constructDivNode(Graph *g)
 {
-    Node &n(newNode(g, "Div", NodeType::Div, GraphEval::evalDivNode));
+    Node &n(newNode(g, "Divide", NodeType::Div, GraphEval::evalDivNode));
     addOp2Ports(g, n);
     return n.id;
 }
@@ -129,14 +129,14 @@ Id constructDistanceNode(Graph *g)
 
 Id constructDotNode(Graph *g)
 {
-    Node &n(newNode(g, "Dot", NodeType::Dot, GraphEval::evalDotNode));
+    Node &n(newNode(g, "Dot product", NodeType::Dot, GraphEval::evalDotNode));
     addOp2Ports(g, n);
     return n.id;
 }
 
 Id constructCrossNode(Graph *g)
 {
-    Node &n(newNode(g, "Cross", NodeType::Cross, GraphEval::evalCrossNode));
+    Node &n(newNode(g, "Cross product", NodeType::Cross, GraphEval::evalCrossNode));
     addOp2Ports(g, n);
     return n.id;
 }
@@ -240,12 +240,12 @@ Id constructVec2CombineNode(Graph *g)
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 0;
-        port.text = "X (R)";
+        port.text = "First component";
     }
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 1;
-        port.text = "Y (G)";
+        port.text = "Second component";
     }
     {
         Port &port = g->addPort(n, PortDirection::Output);
@@ -262,17 +262,17 @@ Id constructVec3CombineNode(Graph *g)
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 0;
-        port.text = "X (R)";
+        port.text = "First component";
     }
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 1;
-        port.text = "Y (G)";
+        port.text = "Second component";
     }
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 2;
-        port.text = "Z (B)";
+        port.text = "Third component";
     }
     {
         Port &port = g->addPort(n, PortDirection::Output);
@@ -289,22 +289,22 @@ Id constructVec4CombineNode(Graph *g)
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 0;
-        port.text = "X (R)";
+        port.text = "First component";
     }
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 1;
-        port.text = "Y (G)";
+        port.text = "Second component";
     }
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 2;
-        port.text = "Z (B)";
+        port.text = "Third component";
     }
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 3;
-        port.text = "W (A)";
+        port.text = "Fourth component";
     }
     {
         Port &port = g->addPort(n, PortDirection::Output);
@@ -321,7 +321,7 @@ Id constructSwizzleNode(Graph *g)
     {
         Port &port = g->addPort(n, PortDirection::Input);
         port.order = 0;
-        port.text = "Vector";
+        port.text = "Input vector";
     }
     {
         Port &port = g->addPort(n, PortDirection::Static);
