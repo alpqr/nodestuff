@@ -1,12 +1,9 @@
 #ifndef PORTDATA_H
 #define PORTDATA_H
 
+#include <string>
 #include <variant>
-#include "glm/vec2.hpp"
-#include "glm/vec3.hpp"
-#include "glm/vec4.hpp"
-#include "glm/mat3x3.hpp"
-#include "glm/mat4x4.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 struct PortDataEmpty { };
 struct PortDataFloat { float v; };
@@ -15,6 +12,7 @@ struct PortDataVec3 { glm::vec3 v; };
 struct PortDataVec4 { glm::vec4 v; };
 struct PortDataMat3 { glm::mat3 v; };
 struct PortDataMat4 { glm::mat4 v; };
+struct PortDataString { std::string v; };
 
 using PortDataVar = std::variant<
     PortDataEmpty,
@@ -23,12 +21,17 @@ using PortDataVar = std::variant<
     PortDataVec3,
     PortDataVec4,
     PortDataMat3,
-    PortDataMat4
+    PortDataMat4,
+    PortDataString
 >;
 
 struct PortData
 {
     PortDataVar d = PortDataEmpty { };
+    std::string desc;
+
+    static PortData notEnoughArgsResult() { return PortData { PortDataEmpty { }, "Not enough arguments" }; }
+    static PortData invalidArgsResult() { return PortData { PortDataEmpty { }, "Invalid arguments" }; }
 };
 
 #endif

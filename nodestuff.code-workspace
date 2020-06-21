@@ -82,7 +82,8 @@
 			"xlocbuf": "cpp",
 			"xlocinfo": "cpp",
 			"xstddef": "cpp",
-			"xtr1common": "cpp"
+			"xtr1common": "cpp",
+			"cstdarg": "cpp"
 		}
 	}
 }

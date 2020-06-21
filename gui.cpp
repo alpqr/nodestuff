@@ -1,7 +1,6 @@
 #include "gui.h"
 #include "nodeconstructors.h"
 #include "imnodes.h"
-#include "glm/gtc/type_ptr.hpp"
 
 void Gui::init(Graph *g)
 {
@@ -54,6 +53,13 @@ static void valueEditor(Port &port, bool *active)
                 ImGui::InputFloat4(labels[col], glm::value_ptr(arg.v) + 4 * col);
             *active |= ImGui::IsItemActive();
             ImGui::PopItemWidth();
+        } else if constexpr (std::is_same_v<T, PortDataString>) {
+            char s[5];
+            strcpy(s, arg.v.c_str());
+            ImGui::PushItemWidth(50);
+            ImGui::InputText("", s, sizeof(s));
+            ImGui::PopItemWidth();
+            arg.v = s;
         }
     }, port.data.d);
 }
@@ -87,8 +93,8 @@ static void valueLabel(const Port &port)
                 sprintf(s, "%s%.5f, %.5f, %.5f, %.5f%s", col == 0 ? "( " : "  ", arg.v[col][0], arg.v[col][1], arg.v[col][2], arg.v[col][3], col == 3 ? " )" : "");
                 ImGui::Text(s);
             }
-        } else {
-            ImGui::TextColored(ImVec4(1, 0, 0, 1), "UNKNOWN");
+        } else if constexpr (std::is_same_v<T, PortDataString>) {
+            ImGui::Text("%s", arg.v.c_str());
         }
     }, port.data.d);
 }
@@ -130,6 +136,10 @@ void Gui::frame()
                 imnodes::BeginOutputAttribute(port.id);
                 ImGui::Text(port.text.c_str());
                 ImGui::SameLine();
+                if (!port.data.desc.empty()) {
+                    ImGui::TextColored(ImVec4(1.0f, 0.0f, 0.0f, 1.0f), "%s", port.data.desc.c_str());
+                    ImGui::SameLine();
+                }
                 valueLabel(port);
                 imnodes::EndOutputAttribute();
             }

@@ -41,7 +41,8 @@ struct Node
     Id id;
     NodeType type;
     size_t inputPortCount;
-    std::function<void(Graph&, Node&, std::vector<PortData>&)> evalFunc;
+    using EvalFunc = std::function<void(Graph&, Node&, std::vector<PortData>&)>;
+    EvalFunc evalFunc;
     std::vector<Port> ports;
 
     Port &port(Id portId)
